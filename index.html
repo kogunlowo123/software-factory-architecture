@@ -488,6 +488,7 @@
     opacity: 0;
     transition: opacity 0.3s;
     border-radius: 12px;
+    pointer-events: none;
   }
   .card:hover { transform: translateY(-2px); }
 
@@ -1160,10 +1161,10 @@
         <span class="card-icon">🔄</span>
         <div class="card-title">CI/CD Templates</div>
         <ul class="card-items">
-          <li>Pipeline-as-Product</li>
-          <li>Language stages (Java, Go, Python, Node)</li>
+          <li><a class="tech-link" href="https://docs.github.com/en/actions/using-workflows/reusing-workflows" target="_blank" rel="noopener">Pipeline-as-Product</a></li>
+          <li>Language stages (<a class="tech-link" href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Java</a>, <a class="tech-link" href="https://go.dev" target="_blank" rel="noopener">Go</a>, <a class="tech-link" href="https://www.python.org" target="_blank" rel="noopener">Python</a>, <a class="tech-link" href="https://nodejs.org" target="_blank" rel="noopener">Node</a>)</li>
           <li>Cloud deploy steps (<a class="tech-link" href="https://aws.amazon.com/eks" target="_blank" rel="noopener">EKS</a>/<a class="tech-link" href="https://azure.microsoft.com/en-us/products/kubernetes-service" target="_blank" rel="noopener">AKS</a>/<a class="tech-link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener">GKE</a>)</li>
-          <li>Version-pinned templates</li>
+          <li><a class="tech-link" href="https://www.terraform.io/docs/language/modules" target="_blank" rel="noopener">Version-pinned templates</a></li>
         </ul>
       </div>
 
@@ -1171,7 +1172,7 @@
         <span class="card-icon">🏗️</span>
         <div class="card-title">IaC Modules</div>
         <ul class="card-items">
-          <li>Network modules (VPC/VNet)</li>
+          <li><a class="tech-link" href="https://registry.terraform.io" target="_blank" rel="noopener">Network modules</a> (VPC/VNet)</li>
           <li>Kubernetes modules (<a class="tech-link" href="https://aws.amazon.com/eks" target="_blank" rel="noopener">EKS</a>/<a class="tech-link" href="https://azure.microsoft.com/en-us/products/kubernetes-service" target="_blank" rel="noopener">AKS</a>/<a class="tech-link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener">GKE</a>)</li>
           <li>Database modules (<a class="tech-link" href="https://aws.amazon.com/rds" target="_blank" rel="noopener">RDS</a>/<a class="tech-link" href="https://cloud.google.com/sql" target="_blank" rel="noopener">Cloud SQL</a>)</li>
           <li>AI/ML modules (<a class="tech-link" href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener">SageMaker</a>/<a class="tech-link" href="https://cloud.google.com/vertex-ai" target="_blank" rel="noopener">Vertex</a>)</li>
@@ -1182,10 +1183,10 @@
         <span class="card-icon">📋</span>
         <div class="card-title">Policy Engine</div>
         <ul class="card-items">
-          <li><a class="tech-link" href="https://www.openpolicyagent.org" target="_blank" rel="noopener">OPA</a> / Rego policies</li>
-          <li>Azure Sentinel rules</li>
-          <li>Guardrails (SCP / <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/governance/policy" target="_blank" rel="noopener">Azure Policy</a>)</li>
-          <li>Auto-approval &amp; exemptions</li>
+          <li><a class="tech-link" href="https://www.openpolicyagent.org" target="_blank" rel="noopener">OPA</a> / <a class="tech-link" href="https://www.openpolicyagent.org/docs/latest/policy-language" target="_blank" rel="noopener">Rego</a> policies</li>
+          <li><a class="tech-link" href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" rel="noopener">Azure Sentinel</a> rules</li>
+          <li>Guardrails (<a class="tech-link" href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" target="_blank" rel="noopener">SCP</a> / <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/governance/policy" target="_blank" rel="noopener">Azure Policy</a>)</li>
+          <li><a class="tech-link" href="https://kyverno.io" target="_blank" rel="noopener">Auto-approval &amp; exemptions</a></li>
         </ul>
       </div>
 
@@ -1193,10 +1194,10 @@
         <span class="card-icon">📦</span>
         <div class="card-title">Service Catalog</div>
         <ul class="card-items">
-          <li>Approved service whitelist</li>
-          <li>Scaffolding templates</li>
-          <li>Budget limits per team</li>
-          <li>Mandatory tag requirements</li>
+          <li><a class="tech-link" href="https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html" target="_blank" rel="noopener">Approved service whitelist</a></li>
+          <li><a class="tech-link" href="https://backstage.io/docs/features/software-templates" target="_blank" rel="noopener">Scaffolding templates</a></li>
+          <li><a class="tech-link" href="https://aws.amazon.com/aws-cost-management/aws-budgets" target="_blank" rel="noopener">Budget limits per team</a></li>
+          <li><a class="tech-link" href="https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html" target="_blank" rel="noopener">Mandatory tag requirements</a></li>
         </ul>
       </div>
 
@@ -1255,7 +1256,7 @@
             <li>Dependency scan (<a class="tech-link" href="https://snyk.io" target="_blank" rel="noopener">Snyk</a>, <a class="tech-link" href="https://trivy.dev" target="_blank" rel="noopener">Trivy</a>)</li>
             <li>IaC scanning (<a class="tech-link" href="https://www.checkov.io" target="_blank" rel="noopener">Checkov</a>, <a class="tech-link" href="https://aquasecurity.github.io/tfsec" target="_blank" rel="noopener">tfsec</a>)</li>
             <li>Secrets detection (<a class="tech-link" href="https://gitleaks.io" target="_blank" rel="noopener">GitLeaks</a>)</li>
-            <li>Container image scan</li>
+            <li><a class="tech-link" href="https://docs.docker.com/scout" target="_blank" rel="noopener">Container image scan</a></li>
           </ul>
         </div>
 
@@ -1265,10 +1266,10 @@
           <ul class="card-items">
             <li><a class="tech-link" href="https://falco.org" target="_blank" rel="noopener">Falco</a> threat detection</li>
             <li><a class="tech-link" href="https://aws.amazon.com/guardduty" target="_blank" rel="noopener">AWS GuardDuty</a> / <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/defender-for-cloud" target="_blank" rel="noopener">Defender</a></li>
-            <li>Compliance monitoring</li>
-            <li>AI anomaly detection</li>
-            <li>SIEM integration</li>
-            <li>Automated incident response</li>
+            <li><a class="tech-link" href="https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html" target="_blank" rel="noopener">Compliance monitoring</a></li>
+            <li><a class="tech-link" href="https://aws.amazon.com/devops-guru" target="_blank" rel="noopener">AI anomaly detection</a></li>
+            <li><a class="tech-link" href="https://www.splunk.com/en_us/products/enterprise-security.html" target="_blank" rel="noopener">SIEM integration</a></li>
+            <li><a class="tech-link" href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-incident-manager.html" target="_blank" rel="noopener">Automated incident response</a></li>
           </ul>
         </div>
 
@@ -1289,7 +1290,7 @@
             <li>Logs (<a class="tech-link" href="https://opensearch.org" target="_blank" rel="noopener">OpenSearch</a> / <a class="tech-link" href="https://www.splunk.com" target="_blank" rel="noopener">Splunk</a>)</li>
             <li>Traces (<a class="tech-link" href="https://www.jaegertracing.io" target="_blank" rel="noopener">Jaeger</a> / <a class="tech-link" href="https://aws.amazon.com/xray" target="_blank" rel="noopener">X-Ray</a>)</li>
             <li>Cloud adapters (<a class="tech-link" href="https://aws.amazon.com/cloudwatch" target="_blank" rel="noopener">CW</a>, <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/azure-monitor" target="_blank" rel="noopener">Azure Monitor</a>)</li>
-            <li>Auto-instrumentation</li>
+            <li><a class="tech-link" href="https://opentelemetry.io/docs/zero-code" target="_blank" rel="noopener">Auto-instrumentation</a></li>
           </ul>
         </div>
 
@@ -1298,11 +1299,11 @@
           <div class="card-title">Dashboards</div>
           <ul class="card-items">
             <li>DORA metrics (<a class="tech-link" href="https://grafana.com" target="_blank" rel="noopener">Grafana</a>)</li>
-            <li>Pipeline health</li>
-            <li>Security findings</li>
-            <li>Cost tracking &amp; attribution</li>
-            <li>SLO / error budget</li>
-            <li>Capacity planning</li>
+            <li><a class="tech-link" href="https://grafana.com/grafana/dashboards" target="_blank" rel="noopener">Pipeline health</a></li>
+            <li><a class="tech-link" href="https://docs.defectdojo.com" target="_blank" rel="noopener">Security findings</a></li>
+            <li><a class="tech-link" href="https://www.kubecost.com" target="_blank" rel="noopener">Cost tracking &amp; attribution</a></li>
+            <li><a class="tech-link" href="https://sloth.dev" target="_blank" rel="noopener">SLO / error budget</a></li>
+            <li><a class="tech-link" href="https://grafana.com/docs/grafana/latest/panels-visualizations" target="_blank" rel="noopener">Capacity planning</a></li>
           </ul>
         </div>
 
@@ -1393,12 +1394,12 @@
         <span class="cloud-logo cloud-types">Workload Types</span>
         <div class="card-title">Execution Models</div>
         <ul class="card-items">
-          <li>API Services (REST / gRPC)</li>
-          <li>Web Apps (SPA / SSR)</li>
-          <li>Batch Jobs (Scheduled)</li>
-          <li>AI/ML Models (Endpoints)</li>
-          <li>Data Pipelines (ETL/ELT)</li>
-          <li>Event-Driven (Streaming)</li>
+          <li><a class="tech-link" href="https://grpc.io" target="_blank" rel="noopener">API Services</a> (REST / gRPC)</li>
+          <li><a class="tech-link" href="https://nextjs.org" target="_blank" rel="noopener">Web Apps</a> (SPA / SSR)</li>
+          <li><a class="tech-link" href="https://argo-workflows.readthedocs.io" target="_blank" rel="noopener">Batch Jobs</a> (Scheduled)</li>
+          <li><a class="tech-link" href="https://www.kubeflow.org/docs/components/serving" target="_blank" rel="noopener">AI/ML Models</a> (Endpoints)</li>
+          <li><a class="tech-link" href="https://spark.apache.org" target="_blank" rel="noopener">Data Pipelines</a> (ETL/ELT)</li>
+          <li><a class="tech-link" href="https://kafka.apache.org" target="_blank" rel="noopener">Event-Driven</a> (Streaming)</li>
         </ul>
       </div>
 
@@ -1416,11 +1417,11 @@
         Design Principles
       </div>
       <ul class="meta-list ticks">
-        <li>Cloud-agnostic control plane</li>
-        <li>Cloud-native execution layer</li>
-        <li>Security &amp; compliance by default</li>
-        <li>Self-service with guardrails</li>
-        <li>Opinionated but extensible</li>
+        <li><a class="tech-link" href="https://www.crossplane.io" target="_blank" rel="noopener">Cloud-agnostic control plane</a></li>
+        <li><a class="tech-link" href="https://www.cncf.io/projects" target="_blank" rel="noopener">Cloud-native execution layer</a></li>
+        <li><a class="tech-link" href="https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final" target="_blank" rel="noopener">Security &amp; compliance by default</a></li>
+        <li><a class="tech-link" href="https://backstage.io/docs/features/software-templates" target="_blank" rel="noopener">Self-service with guardrails</a></li>
+        <li><a class="tech-link" href="https://platformengineering.org" target="_blank" rel="noopener">Opinionated but extensible</a></li>
       </ul>
     </div>
 
@@ -1430,11 +1431,11 @@
         Business Value
       </div>
       <ul class="meta-list bullets" style="color: #60A5FA">
-        <li style="color:var(--muted)">Faster delivery (standardised pipelines)</li>
-        <li style="color:var(--muted)">Built-in security (shift-left controls)</li>
-        <li style="color:var(--muted)">Cloud flexibility (no vendor lock-in)</li>
-        <li style="color:var(--muted)">AI-ready platform (governed workspaces)</li>
-        <li style="color:var(--muted)">Full visibility &amp; cost governance</li>
+        <li style="color:var(--muted)"><a class="tech-link" href="https://dora.dev" target="_blank" rel="noopener">Faster delivery</a> (standardised pipelines)</li>
+        <li style="color:var(--muted)"><a class="tech-link" href="https://owasp.org/www-project-devsecops-guideline" target="_blank" rel="noopener">Built-in security</a> (shift-left controls)</li>
+        <li style="color:var(--muted)"><a class="tech-link" href="https://www.crossplane.io" target="_blank" rel="noopener">Cloud flexibility</a> (no vendor lock-in)</li>
+        <li style="color:var(--muted)"><a class="tech-link" href="https://cloud.google.com/vertex-ai" target="_blank" rel="noopener">AI-ready platform</a> (governed workspaces)</li>
+        <li style="color:var(--muted)"><a class="tech-link" href="https://www.finops.org" target="_blank" rel="noopener">Full visibility &amp; cost governance</a></li>
       </ul>
     </div>
 
