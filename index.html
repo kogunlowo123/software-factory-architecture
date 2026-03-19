@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Factory Architecture — Enterprise Multi-Cloud DevSecOps Platform</title>
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="Software Factory Architecture — Enterprise Multi-Cloud DevSecOps Platform">
+<meta property="og:description" content="Comprehensive enterprise reference architecture for multi-cloud DevSecOps platform engineering with AWS, Azure, and GCP support. Features Zero Trust security, NIST/FedRAMP/HIPAA compliance, and full observability.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://repository-images.githubusercontent.com/placeholder/software-factory-architecture">
+<meta property="og:url" content="https://kogunlowo123.github.io/software-factory-architecture/">
+<meta property="og:site_name" content="Software Factory Architecture">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Software Factory Architecture — Enterprise Multi-Cloud DevSecOps Platform">
+<meta name="twitter:description" content="Enterprise reference architecture for multi-cloud DevSecOps platform engineering with AWS, Azure, and GCP.">
+<meta name="description" content="Enterprise reference architecture for multi-cloud DevSecOps platform engineering. AWS, Azure, GCP. Zero Trust, NIST, FedRAMP, HIPAA compliance. Full observability with OpenTelemetry, Prometheus, Grafana.">
+<meta name="author" content="Kehinde Ogunlowo">
+<link rel="canonical" href="https://kogunlowo123.github.io/software-factory-architecture/">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #080C14;
+    --bg2:       #0D1525;
+    --bg3:       #111D35;
+    --border:    rgba(255,255,255,0.07);
+    --border2:   rgba(255,255,255,0.12);
+    --text:      #E8EDF8;
+    --muted:     #7A90B8;
+    --accent1:   #3B82F6;   /* blue  */
+    --accent2:   #10B981;   /* teal  */
+    --accent3:   #F59E0B;   /* amber */
+    --accent4:   #EC4899;   /* pink  */
+    --accent5:   #8B5CF6;   /* purple*/
+    --accent6:   #EF4444;   /* red   */
+    --layer-dev: #1E3A5F;
+    --layer-core:#1A3D2E;
+    --layer-sec: #3D2200;
+    --layer-obs: #2D1A4A;
+    --layer-cloud:#0F2438;
+    --sidebar-width: 280px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    padding: 40px 24px 60px;
+    background-image:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(59,130,246,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 30% at 80% 100%, rgba(139,92,246,0.06) 0%, transparent 50%);
+  }
+
+  /* ── Tech links styling ── */
+  a.tech-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: text-decoration-color 0.2s;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 2px;
+  }
+  a.tech-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .header-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border: 1px solid rgba(59,130,246,0.4);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--accent1);
+    background: rgba(59,130,246,0.08);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .header-btn:hover {
+    background: rgba(59,130,246,0.18);
+    border-color: rgba(59,130,246,0.6);
+  }
+  .header-btn.btn-resources {
+    border-color: rgba(139,92,246,0.4);
+    color: var(--accent5);
+    background: rgba(139,92,246,0.08);
+  }
+  .header-btn.btn-resources:hover {
+    background: rgba(139,92,246,0.18);
+    border-color: rgba(139,92,246,0.6);
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border: 1px solid rgba(59,130,246,0.4);
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--accent1);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #E8EDF8 0%, #7EB3FF 50%, #A78BFA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Hamburger button ── */
+  .hamburger-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    background: rgba(8,12,20,0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.3s;
+  }
+  .hamburger-btn:hover {
+    border-color: rgba(59,130,246,0.5);
+    background: rgba(59,130,246,0.1);
+  }
+  .hamburger-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 1px;
+    transition: all 0.3s;
+  }
+  .hamburger-btn.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger-btn.active span:nth-child(2) { opacity: 0; }
+  .hamburger-btn.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── Navigation Sidebar ── */
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .nav-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .nav-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--bg2);
+    border-right: 1px solid var(--border2);
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    padding: 72px 20px 24px;
+  }
+  .nav-sidebar.open { transform: translateX(0); }
+
+  .nav-section-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 20px;
+    margin-bottom: 8px;
+    padding-left: 8px;
+  }
+  .nav-section-title:first-child { margin-top: 0; }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nav-link:hover {
+    background: rgba(59,130,246,0.1);
+    color: #93C5FD;
+  }
+  .nav-link .nav-icon { font-size: 14px; flex-shrink: 0; }
+  .nav-link .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  /* ── Resources Drawer ── */
+  .resources-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1099;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .resources-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .resources-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(480px, 90vw);
+    background: var(--bg2);
+    border-left: 1px solid var(--border2);
+    z-index: 1100;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    padding: 24px;
+  }
+  .resources-drawer.open { transform: translateX(0); }
+
+  .resources-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border2);
+  }
+  .resources-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .resources-close {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .resources-close:hover {
+    border-color: rgba(239,68,68,0.5);
+    color: #EF4444;
+  }
+  .res-category {
+    margin-bottom: 20px;
+  }
+  .res-category-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .res-category-title::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    border-radius: 1px;
+  }
+  .res-cat-dev .res-category-title { color: #60A5FA; }
+  .res-cat-dev .res-category-title::before { background: #3B82F6; }
+  .res-cat-core .res-category-title { color: #34D399; }
+  .res-cat-core .res-category-title::before { background: #10B981; }
+  .res-cat-sec .res-category-title { color: #FCD34D; }
+  .res-cat-sec .res-category-title::before { background: #F59E0B; }
+  .res-cat-obs .res-category-title { color: #F9A8D4; }
+  .res-cat-obs .res-category-title::before { background: #EC4899; }
+  .res-cat-cloud .res-category-title { color: #C4B5FD; }
+  .res-cat-cloud .res-category-title::before { background: #8B5CF6; }
+  .res-cat-compliance .res-category-title { color: #34D399; }
+  .res-cat-compliance .res-category-title::before { background: #10B981; }
+
+  .res-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  .res-list li {
+    font-size: 12px;
+  }
+  .res-list a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .res-list a::before {
+    content: '>';
+    font-size: 10px;
+    color: var(--accent1);
+    flex-shrink: 0;
+  }
+  .res-list a:hover { color: var(--text); }
+  .res-list a .ext-icon {
+    font-size: 9px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .res-list a:hover .ext-icon { opacity: 0.6; }
+
+  /* ── Diagram wrapper ── */
+  .diagram {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Layer ── */
+  .layer {
+    border-radius: 16px;
+    border: 1px solid var(--border2);
+    padding: 20px 24px 24px;
+    position: relative;
+    margin-bottom: 6px;
+    animation: fadeIn 0.6s ease both;
+  }
+  @keyframes fadeIn {
+    from { opacity:0; transform: translateY(16px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .layer:nth-child(1) { animation-delay:0.0s; }
+  .layer:nth-child(2) { animation-delay:0.1s; }
+  .layer:nth-child(3) { animation-delay:0.2s; }
+  .layer:nth-child(4) { animation-delay:0.3s; }
+  .layer:nth-child(5) { animation-delay:0.4s; }
+  .layer:nth-child(6) { animation-delay:0.5s; }
+
+  .layer-dev   { background: linear-gradient(135deg, rgba(30,58,95,0.6), rgba(15,36,70,0.3)); border-color: rgba(59,130,246,0.3); }
+  .layer-core  { background: linear-gradient(135deg, rgba(26,61,46,0.6), rgba(14,40,28,0.3)); border-color: rgba(16,185,129,0.3); }
+  .layer-sec   { background: linear-gradient(135deg, rgba(61,34,0,0.7),  rgba(40,20,0,0.3));  border-color: rgba(245,158,11,0.3); }
+  .layer-obs   { background: linear-gradient(135deg, rgba(45,26,74,0.7), rgba(28,14,50,0.3)); border-color: rgba(236,72,153,0.3); }
+  .layer-cloud { background: linear-gradient(135deg, rgba(15,36,56,0.6), rgba(8,18,32,0.3));  border-color: rgba(139,92,246,0.3); }
+  .layer-meta  { background: rgba(255,255,255,0.02); border-color: var(--border); }
+
+  .layer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .layer-label::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    border-radius: 1px;
+  }
+  .layer-dev   .layer-label { color: #60A5FA; }
+  .layer-dev   .layer-label::before { background: #3B82F6; }
+  .layer-core  .layer-label { color: #34D399; }
+  .layer-core  .layer-label::before { background: #10B981; }
+  .layer-sec   .layer-label { color: #FCD34D; }
+  .layer-sec   .layer-label::before { background: #F59E0B; }
+  .layer-obs   .layer-label { color: #F9A8D4; }
+  .layer-obs   .layer-label::before { background: #EC4899; }
+  .layer-cloud .layer-label { color: #C4B5FD; }
+  .layer-cloud .layer-label::before { background: #8B5CF6; }
+  .layer-meta  .layer-label { color: var(--muted); }
+  .layer-meta  .layer-label::before { background: var(--muted); }
+
+  /* ── Cards grid ── */
+  .cards {
+    display: grid;
+    gap: 12px;
+  }
+  .cards-1 { grid-template-columns: 1fr; }
+  .cards-2 { grid-template-columns: 1fr 1fr; }
+  .cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cards-4 { grid-template-columns: repeat(4, 1fr); }
+  .cards-2-1 { grid-template-columns: 1fr 1fr; }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    cursor: default;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 12px;
+  }
+  .card:hover { transform: translateY(-2px); }
+
+  /* Accent variants */
+  .card-blue   { border-top: 2px solid #3B82F6; }
+  .card-teal   { border-top: 2px solid #10B981; }
+  .card-amber  { border-top: 2px solid #F59E0B; }
+  .card-pink   { border-top: 2px solid #EC4899; }
+  .card-purple { border-top: 2px solid #8B5CF6; }
+  .card-red    { border-top: 2px solid #EF4444; }
+  .card-cyan   { border-top: 2px solid #06B6D4; }
+
+  .card:hover { background: rgba(255,255,255,0.055); }
+  .card-blue:hover   { border-color: rgba(59,130,246,0.6);  box-shadow: 0 8px 32px rgba(59,130,246,0.12); }
+  .card-teal:hover   { border-color: rgba(16,185,129,0.6);  box-shadow: 0 8px 32px rgba(16,185,129,0.12); }
+  .card-amber:hover  { border-color: rgba(245,158,11,0.6);  box-shadow: 0 8px 32px rgba(245,158,11,0.12); }
+  .card-pink:hover   { border-color: rgba(236,72,153,0.6);  box-shadow: 0 8px 32px rgba(236,72,153,0.12); }
+  .card-purple:hover { border-color: rgba(139,92,246,0.6);  box-shadow: 0 8px 32px rgba(139,92,246,0.12); }
+  .card-red:hover    { border-color: rgba(239,68,68,0.6);   box-shadow: 0 8px 32px rgba(239,68,68,0.12); }
+
+  .card-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    color: #E8EDF8;
+  }
+  .card-blue   .card-title { color: #93C5FD; }
+  .card-teal   .card-title { color: #6EE7B7; }
+  .card-amber  .card-title { color: #FCD34D; }
+  .card-pink   .card-title { color: #F9A8D4; }
+  .card-purple .card-title { color: #C4B5FD; }
+  .card-red    .card-title { color: #FCA5A5; }
+  .card-cyan   .card-title { color: #67E8F9; }
+
+  .card-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .card-items li {
+    font-size: 11.5px;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .card-items li::before {
+    content: '>';
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: -0.5px;
+  }
+  .card-blue   .card-items li::before { color: #3B82F6; }
+  .card-teal   .card-items li::before { color: #10B981; }
+  .card-amber  .card-items li::before { color: #F59E0B; }
+  .card-pink   .card-items li::before { color: #EC4899; }
+  .card-purple .card-items li::before { color: #8B5CF6; }
+  .card-red    .card-items li::before { color: #EF4444; }
+  .card-cyan   .card-items li::before { color: #06B6D4; }
+
+  /* ── Connector rows ── */
+  .connector-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    margin: 2px 0;
+    height: 32px;
+    position: relative;
+  }
+
+  /* ── Flow arrows SVG ── */
+  .flow-svg {
+    width: 100%;
+    overflow: visible;
+    display: block;
+    height: 32px;
+  }
+
+  /* ── Central portal card ── */
+  .portal-card {
+    background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.1));
+    border: 1.5px solid rgba(59,130,246,0.5);
+    border-radius: 14px;
+    padding: 18px 28px;
+    text-align: center;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 0 0 40px rgba(59,130,246,0.15), 0 0 80px rgba(59,130,246,0.06);
+  }
+  .portal-card .glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.2), rgba(59,130,246,0.1));
+    z-index: -1;
+    filter: blur(8px);
+  }
+  .portal-icon { font-size: 28px; margin-bottom: 6px; }
+  .portal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #93C5FD;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .portal-sub {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .portal-sub span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .portal-sub span::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3B82F6;
+  }
+
+  /* ── Cloud row ── */
+  .cloud-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.2fr;
+    gap: 12px;
+  }
+
+  /* ── Cloud platform badge ── */
+  .cloud-logo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .cloud-aws    { background: rgba(255,153,0,0.15); color: #FF9900; border: 1px solid rgba(255,153,0,0.3); }
+  .cloud-azure  { background: rgba(0,137,214,0.15); color: #0089D6; border: 1px solid rgba(0,137,214,0.3); }
+  .cloud-gcp    { background: rgba(66,133,244,0.15); color: #4285F4; border: 1px solid rgba(66,133,244,0.3); }
+  .cloud-types  { background: rgba(139,92,246,0.15); color: #A78BFA; border: 1px solid rgba(139,92,246,0.3); }
+
+  /* ── Meta row ── */
+  .meta-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1.1fr 0.8fr;
+    gap: 12px;
+  }
+  .meta-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .meta-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-title .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .meta-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .meta-list li {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .meta-list li::before { content: "\2713"; font-size: 10px; flex-shrink: 0; }
+  .meta-list.bullets li::before { content: "\2022"; color: inherit; }
+  .meta-list.ticks  li::before { color: #10B981; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .legend-line {
+    width: 36px;
+    height: 2px;
+    border-radius: 1px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .legend-dashed {
+    background: none;
+    border-bottom: 2px dashed currentColor;
+    height: 0;
+  }
+
+  /* ── Animated flow lines ── */
+  .flow-line {
+    stroke-dasharray: 6 4;
+    animation: dash 2s linear infinite;
+  }
+  .flow-line-slow {
+    stroke-dasharray: 8 5;
+    animation: dash 3s linear infinite;
+  }
+  @keyframes dash {
+    to { stroke-dashoffset: -20; }
+  }
+
+  /* ── Pulse dot ── */
+  .pulse-dot {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; r: 4; }
+    50%       { opacity: 0.5; r: 6; }
+  }
+
+  /* ── Footer ── */
+  .page-footer {
+    text-align: center;
+    margin-top: 48px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  /* Tooltip */
+  .card[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1E2D4A;
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #93C5FD;
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* ── Compliance badge link ── */
+  a.compliance-badge {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+    border-radius: 6px;
+  }
+  a.compliance-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  /* ── Print / export friendly ── */
+  @media print {
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body {
+      background: #fff !important;
+      color: #111 !important;
+      padding: 20px !important;
+      font-size: 10pt !important;
+      background-image: none !important;
+    }
+    .hamburger-btn,
+    .nav-sidebar,
+    .nav-overlay,
+    .resources-drawer,
+    .resources-overlay,
+    .header-actions,
+    .flow-line,
+    .flow-line-slow,
+    .pulse-dot { display: none !important; }
+
+    .page-header { margin-bottom: 24px !important; }
+    .badge {
+      border-color: #333 !important;
+      color: #333 !important;
+    }
+    h1 {
+      background: none !important;
+      -webkit-text-fill-color: #111 !important;
+      color: #111 !important;
+      font-size: 22pt !important;
+    }
+    .subtitle { color: #555 !important; }
+
+    .layer {
+      border: 1px solid #ccc !important;
+      background: #f9f9f9 !important;
+      page-break-inside: avoid;
+      margin-bottom: 8px !important;
+      padding: 12px 16px !important;
+    }
+    .layer-label { color: #333 !important; }
+    .layer-label::before { background: #333 !important; }
+
+    .card {
+      border: 1px solid #ccc !important;
+      border-top: 2px solid #666 !important;
+      background: #fff !important;
+      box-shadow: none !important;
+      transform: none !important;
+      page-break-inside: avoid;
+    }
+    .card-title { color: #111 !important; }
+    .card-items li { color: #333 !important; }
+    .card-items li::before { color: #666 !important; }
+
+    .portal-card {
+      border: 2px solid #333 !important;
+      background: #f0f4ff !important;
+      box-shadow: none !important;
+    }
+    .portal-card .glow { display: none !important; }
+    .portal-title { color: #111 !important; }
+    .portal-sub { color: #555 !important; }
+    .portal-sub span::before { background: #333 !important; }
+
+    .connector-row { height: 20px !important; }
+    .flow-svg line { stroke: #999 !important; stroke-dasharray: 4 2 !important; }
+    .flow-svg polygon { fill: #999 !important; }
+    .flow-svg text { fill: #555 !important; }
+
+    .cloud-logo {
+      background: #eee !important;
+      border-color: #999 !important;
+      color: #333 !important;
+    }
+
+    .meta-card {
+      border: 1px solid #ccc !important;
+      background: #fff !important;
+    }
+    .meta-title { color: #333 !important; }
+    .meta-title .dot { background: #555 !important; }
+    .meta-list li { color: #333 !important; }
+    .meta-list.ticks li::before { color: #333 !important; }
+
+    a.tech-link { color: #111 !important; text-decoration: underline !important; text-decoration-color: #999 !important; }
+    a.compliance-badge div {
+      background: #eee !important;
+      border-color: #999 !important;
+      color: #333 !important;
+    }
+
+    .legend-item { color: #333 !important; }
+    .legend svg line { stroke: #666 !important; }
+
+    .page-footer { color: #777 !important; }
+
+    @page {
+      margin: 0.75in;
+      size: A4 portrait;
+    }
+  }
+
+  /* ── Responsive adjustments ── */
+  @media (max-width: 900px) {
+    .cards-4 { grid-template-columns: 1fr 1fr; }
+    .cloud-row { grid-template-columns: 1fr 1fr; }
+    .meta-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .cards-2, .cards-4 { grid-template-columns: 1fr; }
+    .cloud-row { grid-template-columns: 1fr; }
+    .res-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Hamburger Menu Button ─────────────────────────────────────────────── -->
+<button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- ── Navigation Sidebar ────────────────────────────────────────────────── -->
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-sidebar" id="navSidebar">
+  <div class="nav-section-title">Architecture Layers</div>
+  <a href="#layer-dev-experience" class="nav-link" onclick="closeSidebar()">
+    <span class="nav-dot" style="background:#3B82F6;"></span> Developer Experience
+  </a>
+  <a href="#layer-factory-core" class="nav-link" onclick="closeSidebar()">
+    <span class="nav-dot" style="background:#10B981;"></span> Software Factory Core
+  </a>
+  <a href="#layer-security" class="nav-link" onclick="closeSidebar()">
+    <span class="nav-dot" style="background:#F59E0B;"></span> Security &amp; Compliance
+  </a>
+  <a href="#layer-observability" class="nav-link" onclick="closeSidebar()">
+    <span class="nav-dot" style="background:#EC4899;"></span> Observability
+  </a>
+  <a href="#layer-cloud-execution" class="nav-link" onclick="closeSidebar()">
+    <span class="nav-dot" style="background:#8B5CF6;"></span> Cloud Execution
+  </a>
+  <a href="#section-compliance" class="nav-link" onclick="closeSidebar()">
+    <span class="nav-dot" style="background:#10B981;"></span> Compliance Badges
+  </a>
+
+  <div class="nav-divider"></div>
+  <div class="nav-section-title">Documentation</div>
+  <a href="docs/developer-experience.html" class="nav-link">
+    <span class="nav-icon">📖</span> Developer Experience
+  </a>
+  <a href="docs/factory-core.html" class="nav-link">
+    <span class="nav-icon">📖</span> Factory Core
+  </a>
+  <a href="docs/security-compliance.html" class="nav-link">
+    <span class="nav-icon">📖</span> Security &amp; Compliance
+  </a>
+  <a href="docs/observability.html" class="nav-link">
+    <span class="nav-icon">📖</span> Observability
+  </a>
+  <a href="docs/cloud-execution.html" class="nav-link">
+    <span class="nav-icon">📖</span> Cloud Execution
+  </a>
+
+  <div class="nav-divider"></div>
+  <div class="nav-section-title">Quick Actions</div>
+  <a href="#" class="nav-link" onclick="closeSidebar(); openResources(); return false;">
+    <span class="nav-icon">📚</span> All Resources
+  </a>
+  <a href="#" class="nav-link" onclick="closeSidebar(); window.print(); return false;">
+    <span class="nav-icon">🖨️</span> Download PDF
+  </a>
+</nav>
+
+<!-- ── Resources Drawer ──────────────────────────────────────────────────── -->
+<div class="resources-overlay" id="resOverlay"></div>
+<div class="resources-drawer" id="resDrawer">
+  <div class="resources-header">
+    <div class="resources-title">Technology Resources</div>
+    <button class="resources-close" id="resCloseBtn" aria-label="Close resources">&times;</button>
+  </div>
+
+  <div class="res-category res-cat-dev">
+    <div class="res-category-title">Developer Experience</div>
+    <ul class="res-list">
+      <li><a href="https://backstage.io" target="_blank" rel="noopener">Backstage <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-core">
+    <div class="res-category-title">CI/CD</div>
+    <ul class="res-list">
+      <li><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">GitHub Actions <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.jenkins.io" target="_blank" rel="noopener">Jenkins <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://learn.microsoft.com/en-us/azure/devops/pipelines" target="_blank" rel="noopener">Azure Pipelines <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://docs.gitlab.com/ee/ci" target="_blank" rel="noopener">GitLab CI <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-core">
+    <div class="res-category-title">Infrastructure as Code</div>
+    <ul class="res-list">
+      <li><a href="https://www.terraform.io" target="_blank" rel="noopener">Terraform <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://registry.terraform.io" target="_blank" rel="noopener">Terraform Registry <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-core">
+    <div class="res-category-title">Policy Engine</div>
+    <ul class="res-list">
+      <li><a href="https://www.openpolicyagent.org" target="_blank" rel="noopener">OPA <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://learn.microsoft.com/en-us/azure/governance/policy" target="_blank" rel="noopener">Azure Policy <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://kyverno.io" target="_blank" rel="noopener">Kyverno <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-sec">
+    <div class="res-category-title">Security — SAST &amp; DAST</div>
+    <ul class="res-list">
+      <li><a href="https://semgrep.dev" target="_blank" rel="noopener">Semgrep <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://codeql.github.com" target="_blank" rel="noopener">CodeQL <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.zaproxy.org" target="_blank" rel="noopener">OWASP ZAP <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-sec">
+    <div class="res-category-title">Security — SCA &amp; IaC Scanning</div>
+    <ul class="res-list">
+      <li><a href="https://snyk.io" target="_blank" rel="noopener">Snyk <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://trivy.dev" target="_blank" rel="noopener">Trivy <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.checkov.io" target="_blank" rel="noopener">Checkov <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aquasecurity.github.io/tfsec" target="_blank" rel="noopener">tfsec <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-sec">
+    <div class="res-category-title">Security — Secrets &amp; Runtime</div>
+    <ul class="res-list">
+      <li><a href="https://gitleaks.io" target="_blank" rel="noopener">GitLeaks <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://falco.org" target="_blank" rel="noopener">Falco <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/guardduty" target="_blank" rel="noopener">AWS GuardDuty <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud" target="_blank" rel="noopener">Microsoft Defender <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-obs">
+    <div class="res-category-title">Observability</div>
+    <ul class="res-list">
+      <li><a href="https://opentelemetry.io" target="_blank" rel="noopener">OpenTelemetry <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://prometheus.io" target="_blank" rel="noopener">Prometheus <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://thanos.io" target="_blank" rel="noopener">Thanos <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://grafana.com" target="_blank" rel="noopener">Grafana <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.jaegertracing.io" target="_blank" rel="noopener">Jaeger <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/xray" target="_blank" rel="noopener">AWS X-Ray <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/cloudwatch" target="_blank" rel="noopener">AWS CloudWatch <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://learn.microsoft.com/en-us/azure/azure-monitor" target="_blank" rel="noopener">Azure Monitor <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://opensearch.org" target="_blank" rel="noopener">OpenSearch <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.splunk.com" target="_blank" rel="noopener">Splunk <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-cloud">
+    <div class="res-category-title">AWS Services</div>
+    <ul class="res-list">
+      <li><a href="https://aws.amazon.com/eks" target="_blank" rel="noopener">EKS <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/lambda" target="_blank" rel="noopener">Lambda <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/fargate" target="_blank" rel="noopener">Fargate <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/rds" target="_blank" rel="noopener">RDS <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/rds/aurora" target="_blank" rel="noopener">Aurora <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener">SageMaker <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/s3" target="_blank" rel="noopener">S3 <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/sqs" target="_blank" rel="noopener">SQS <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://aws.amazon.com/sns" target="_blank" rel="noopener">SNS <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-cloud">
+    <div class="res-category-title">Azure Services</div>
+    <ul class="res-list">
+      <li><a href="https://azure.microsoft.com/en-us/products/kubernetes-service" target="_blank" rel="noopener">AKS <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/functions" target="_blank" rel="noopener">Azure Functions <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/container-apps" target="_blank" rel="noopener">Container Apps <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/azure-sql" target="_blank" rel="noopener">Azure SQL <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/cosmos-db" target="_blank" rel="noopener">Cosmos DB <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/machine-learning" target="_blank" rel="noopener">Azure ML <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/storage/blobs" target="_blank" rel="noopener">Blob Storage <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/service-bus" target="_blank" rel="noopener">Service Bus <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://azure.microsoft.com/en-us/products/event-hubs" target="_blank" rel="noopener">Event Hubs <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-cloud">
+    <div class="res-category-title">GCP Services</div>
+    <ul class="res-list">
+      <li><a href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener">GKE <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/run" target="_blank" rel="noopener">Cloud Run <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/functions" target="_blank" rel="noopener">Cloud Functions <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/sql" target="_blank" rel="noopener">Cloud SQL <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/spanner" target="_blank" rel="noopener">Spanner <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/vertex-ai" target="_blank" rel="noopener">Vertex AI <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/storage" target="_blank" rel="noopener">GCS <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://cloud.google.com/pubsub" target="_blank" rel="noopener">Pub/Sub <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="res-category res-cat-compliance">
+    <div class="res-category-title">Compliance &amp; Frameworks</div>
+    <ul class="res-list">
+      <li><a href="https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final" target="_blank" rel="noopener">NIST SP 800-53 <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.fedramp.gov" target="_blank" rel="noopener">FedRAMP <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.hhs.gov/hipaa" target="_blank" rel="noopener">HIPAA <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://hitrustalliance.net" target="_blank" rel="noopener">HITRUST <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://dodcio.defense.gov/CMMC" target="_blank" rel="noopener">CMMC <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.cisecurity.org/cis-benchmarks" target="_blank" rel="noopener">CIS Benchmarks <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://slsa.dev" target="_blank" rel="noopener">SLSA <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://www.cncf.io" target="_blank" rel="noopener">CNCF <span class="ext-icon">↗</span></a></li>
+      <li><a href="https://csrc.nist.gov/publications/detail/sp/800-207/final" target="_blank" rel="noopener">Zero Trust (NIST 800-207) <span class="ext-icon">↗</span></a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── Page Header ─────────────────────────────────────────────────────────── -->
+<header class="page-header">
+  <div class="badge">Enterprise Reference Architecture</div>
+  <h1>Software Factory Architecture<br>Multi-Cloud DevSecOps Platform</h1>
+  <p class="subtitle">AWS · Azure · GCP &nbsp;|&nbsp; DevSecOps · Platform Engineering · Zero Trust &nbsp;|&nbsp; v3.0 · 2026</p>
+  <div class="header-actions">
+    <button class="header-btn btn-resources" onclick="openResources()">📚 Resources</button>
+    <button class="header-btn" onclick="window.print()">🖨️ Download PDF</button>
+  </div>
+</header>
+
+<!-- ── Diagram ─────────────────────────────────────────────────────────────── -->
+<div class="diagram">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- LAYER 1: DEVELOPER EXPERIENCE                                          -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="layer layer-dev" id="layer-dev-experience">
+    <div class="layer-label">Developer Experience Layer</div>
+
+    <!-- Portal card (centered) -->
+    <div class="portal-card">
+      <div class="glow"></div>
+      <div class="portal-icon">🖥️</div>
+      <div class="portal-title">Developer Portal (<a class="tech-link" href="https://backstage.io" target="_blank" rel="noopener">Backstage</a>)</div>
+      <div class="portal-sub">
+        <span>Developer Request</span>
+        <span>Self-Service</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flow arrow: Dev Portal → Factory Core -->
+  <div class="connector-row">
+    <svg class="flow-svg" viewBox="0 0 1200 32" preserveAspectRatio="none">
+      <!-- Central vertical drop -->
+      <line x1="600" y1="0" x2="600" y2="28"
+            stroke="#3B82F6" stroke-width="2"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="594,22 606,22 600,32" fill="#3B82F6"/>
+      <!-- Label -->
+      <text x="620" y="20" fill="#60A5FA" font-size="9" font-family="Space Grotesk" font-weight="600" letter-spacing="0.05em">DEVELOPER REQUEST</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- LAYER 2: SOFTWARE FACTORY CORE                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="layer layer-core" id="layer-factory-core">
+    <div class="layer-label">Software Factory Core</div>
+    <div class="cards cards-4">
+
+      <div class="card card-teal" data-tip="Pipeline-as-Product — versioned, reusable CI/CD">
+        <span class="card-icon">🔄</span>
+        <div class="card-title">CI/CD Templates</div>
+        <ul class="card-items">
+          <li>Pipeline-as-Product</li>
+          <li>Language stages (Java, Go, Python, Node)</li>
+          <li>Cloud deploy steps (<a class="tech-link" href="https://aws.amazon.com/eks" target="_blank" rel="noopener">EKS</a>/<a class="tech-link" href="https://azure.microsoft.com/en-us/products/kubernetes-service" target="_blank" rel="noopener">AKS</a>/<a class="tech-link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener">GKE</a>)</li>
+          <li>Version-pinned templates</li>
+        </ul>
+      </div>
+
+      <div class="card card-teal" data-tip="Versioned Terraform modules — security defaults baked in">
+        <span class="card-icon">🏗️</span>
+        <div class="card-title">IaC Modules</div>
+        <ul class="card-items">
+          <li>Network modules (VPC/VNet)</li>
+          <li>Kubernetes modules (<a class="tech-link" href="https://aws.amazon.com/eks" target="_blank" rel="noopener">EKS</a>/<a class="tech-link" href="https://azure.microsoft.com/en-us/products/kubernetes-service" target="_blank" rel="noopener">AKS</a>/<a class="tech-link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener">GKE</a>)</li>
+          <li>Database modules (<a class="tech-link" href="https://aws.amazon.com/rds" target="_blank" rel="noopener">RDS</a>/<a class="tech-link" href="https://cloud.google.com/sql" target="_blank" rel="noopener">Cloud SQL</a>)</li>
+          <li>AI/ML modules (<a class="tech-link" href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener">SageMaker</a>/<a class="tech-link" href="https://cloud.google.com/vertex-ai" target="_blank" rel="noopener">Vertex</a>)</li>
+        </ul>
+      </div>
+
+      <div class="card card-amber" data-tip="OPA/Rego policies enforce compliance pre-deploy">
+        <span class="card-icon">📋</span>
+        <div class="card-title">Policy Engine</div>
+        <ul class="card-items">
+          <li><a class="tech-link" href="https://www.openpolicyagent.org" target="_blank" rel="noopener">OPA</a> / Rego policies</li>
+          <li>Azure Sentinel rules</li>
+          <li>Guardrails (SCP / <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/governance/policy" target="_blank" rel="noopener">Azure Policy</a>)</li>
+          <li>Auto-approval &amp; exemptions</li>
+        </ul>
+      </div>
+
+      <div class="card card-teal" data-tip="Approved services, cost limits, tag enforcement">
+        <span class="card-icon">📦</span>
+        <div class="card-title">Service Catalog</div>
+        <ul class="card-items">
+          <li>Approved service whitelist</li>
+          <li>Scaffolding templates</li>
+          <li>Budget limits per team</li>
+          <li>Mandatory tag requirements</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Flow arrows: Core → Security + Observability -->
+  <div class="connector-row" style="height:44px;">
+    <svg class="flow-svg" viewBox="0 0 1200 44" preserveAspectRatio="none">
+      <!-- Factory Processing (green) — to security -->
+      <line x1="200" y1="0" x2="200" y2="40"
+            stroke="#10B981" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="195,34 205,34 200,44" fill="#10B981"/>
+
+      <!-- Security Validation (amber) — diagonal -->
+      <line x1="400" y1="0" x2="350" y2="40"
+            stroke="#F59E0B" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="344,35 354,38 350,44" fill="#F59E0B"/>
+
+      <!-- To observability -->
+      <line x1="800" y1="0" x2="800" y2="40"
+            stroke="#EC4899" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="795,34 805,34 800,44" fill="#EC4899"/>
+
+      <!-- To service catalog / dashboards -->
+      <line x1="1000" y1="0" x2="1000" y2="40"
+            stroke="#EC4899" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="995,34 1005,34 1000,44" fill="#EC4899"/>
+
+      <!-- Labels -->
+      <text x="215" y="22" fill="#34D399" font-size="8" font-family="Space Grotesk" font-weight="600" letter-spacing="0.06em">FACTORY PROCESSING</text>
+      <text x="815" y="22" fill="#F9A8D4" font-size="8" font-family="Space Grotesk" font-weight="600" letter-spacing="0.06em">OBSERVABILITY FEED</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- LAYER 3: SECURITY + OBSERVABILITY (side by side)                       -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+
+    <!-- Security & Compliance -->
+    <div class="layer layer-sec" id="layer-security" style="margin-bottom:0;">
+      <div class="layer-label">Security &amp; Compliance</div>
+      <div class="cards cards-2">
+
+        <div class="card card-amber">
+          <span class="card-icon">🔒</span>
+          <div class="card-title">Shift-Left Security</div>
+          <ul class="card-items">
+            <li>SAST (<a class="tech-link" href="https://semgrep.dev" target="_blank" rel="noopener">Semgrep</a>, <a class="tech-link" href="https://codeql.github.com" target="_blank" rel="noopener">CodeQL</a>)</li>
+            <li>DAST (<a class="tech-link" href="https://www.zaproxy.org" target="_blank" rel="noopener">OWASP ZAP</a>)</li>
+            <li>Dependency scan (<a class="tech-link" href="https://snyk.io" target="_blank" rel="noopener">Snyk</a>, <a class="tech-link" href="https://trivy.dev" target="_blank" rel="noopener">Trivy</a>)</li>
+            <li>IaC scanning (<a class="tech-link" href="https://www.checkov.io" target="_blank" rel="noopener">Checkov</a>, <a class="tech-link" href="https://aquasecurity.github.io/tfsec" target="_blank" rel="noopener">tfsec</a>)</li>
+            <li>Secrets detection (<a class="tech-link" href="https://gitleaks.io" target="_blank" rel="noopener">GitLeaks</a>)</li>
+            <li>Container image scan</li>
+          </ul>
+        </div>
+
+        <div class="card card-red">
+          <span class="card-icon">🛡️</span>
+          <div class="card-title">Runtime Security</div>
+          <ul class="card-items">
+            <li><a class="tech-link" href="https://falco.org" target="_blank" rel="noopener">Falco</a> threat detection</li>
+            <li><a class="tech-link" href="https://aws.amazon.com/guardduty" target="_blank" rel="noopener">AWS GuardDuty</a> / <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/defender-for-cloud" target="_blank" rel="noopener">Defender</a></li>
+            <li>Compliance monitoring</li>
+            <li>AI anomaly detection</li>
+            <li>SIEM integration</li>
+            <li>Automated incident response</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Observability -->
+    <div class="layer layer-obs" id="layer-observability" style="margin-bottom:0;">
+      <div class="layer-label">Observability</div>
+      <div class="cards cards-2">
+
+        <div class="card card-pink">
+          <span class="card-icon">📊</span>
+          <div class="card-title">Telemetry</div>
+          <ul class="card-items">
+            <li><a class="tech-link" href="https://opentelemetry.io" target="_blank" rel="noopener">OpenTelemetry</a> (OTel)</li>
+            <li>Metrics (<a class="tech-link" href="https://prometheus.io" target="_blank" rel="noopener">Prometheus</a> + <a class="tech-link" href="https://thanos.io" target="_blank" rel="noopener">Thanos</a>)</li>
+            <li>Logs (<a class="tech-link" href="https://opensearch.org" target="_blank" rel="noopener">OpenSearch</a> / <a class="tech-link" href="https://www.splunk.com" target="_blank" rel="noopener">Splunk</a>)</li>
+            <li>Traces (<a class="tech-link" href="https://www.jaegertracing.io" target="_blank" rel="noopener">Jaeger</a> / <a class="tech-link" href="https://aws.amazon.com/xray" target="_blank" rel="noopener">X-Ray</a>)</li>
+            <li>Cloud adapters (<a class="tech-link" href="https://aws.amazon.com/cloudwatch" target="_blank" rel="noopener">CW</a>, <a class="tech-link" href="https://learn.microsoft.com/en-us/azure/azure-monitor" target="_blank" rel="noopener">Azure Monitor</a>)</li>
+            <li>Auto-instrumentation</li>
+          </ul>
+        </div>
+
+        <div class="card card-purple">
+          <span class="card-icon">📉</span>
+          <div class="card-title">Dashboards</div>
+          <ul class="card-items">
+            <li>DORA metrics (<a class="tech-link" href="https://grafana.com" target="_blank" rel="noopener">Grafana</a>)</li>
+            <li>Pipeline health</li>
+            <li>Security findings</li>
+            <li>Cost tracking &amp; attribution</li>
+            <li>SLO / error budget</li>
+            <li>Capacity planning</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Flow arrows: Security + Observability → Cloud -->
+  <div class="connector-row" style="height:44px;">
+    <svg class="flow-svg" viewBox="0 0 1200 44" preserveAspectRatio="none">
+      <!-- Cloud deployment (purple) — from left -->
+      <line x1="150" y1="0" x2="200" y2="40"
+            stroke="#8B5CF6" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line-slow"/>
+      <polygon points="194,36 204,38 200,44" fill="#8B5CF6"/>
+
+      <!-- Security validation continues -->
+      <line x1="350" y1="0" x2="450" y2="40"
+            stroke="#F59E0B" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="444,36 454,38 450,44" fill="#F59E0B"/>
+
+      <!-- Observability to cloud -->
+      <line x1="750" y1="0" x2="700" y2="40"
+            stroke="#EC4899" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line"/>
+      <polygon points="694,36 704,38 700,44" fill="#EC4899"/>
+
+      <line x1="950" y1="0" x2="900" y2="40"
+            stroke="#8B5CF6" stroke-width="1.5"
+            stroke-dasharray="5 3" class="flow-line-slow"/>
+      <polygon points="894,36 904,38 900,44" fill="#8B5CF6"/>
+
+      <!-- Labels -->
+      <text x="210" y="22" fill="#C4B5FD" font-size="8" font-family="Space Grotesk" font-weight="600" letter-spacing="0.06em">CLOUD DEPLOYMENT</text>
+      <text x="460" y="22" fill="#FCD34D" font-size="8" font-family="Space Grotesk" font-weight="600" letter-spacing="0.06em">SECURITY VALIDATION</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- LAYER 4: CLOUD EXECUTION                                               -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="layer layer-cloud" id="layer-cloud-execution">
+    <div class="layer-label">Cloud Execution Layer</div>
+    <div class="cloud-row">
+
+      <div class="card card-amber">
+        <span class="cloud-logo cloud-aws">AWS</span>
+        <div class="card-title">Amazon Web Services</div>
+        <ul class="card-items">
+          <li><a class="tech-link" href="https://aws.amazon.com/eks" target="_blank" rel="noopener">EKS</a> (Managed Kubernetes)</li>
+          <li><a class="tech-link" href="https://aws.amazon.com/lambda" target="_blank" rel="noopener">Lambda</a> (Serverless)</li>
+          <li><a class="tech-link" href="https://aws.amazon.com/fargate" target="_blank" rel="noopener">Fargate</a> (Serverless containers)</li>
+          <li><a class="tech-link" href="https://aws.amazon.com/rds" target="_blank" rel="noopener">RDS</a> / <a class="tech-link" href="https://aws.amazon.com/rds/aurora" target="_blank" rel="noopener">Aurora</a></li>
+          <li><a class="tech-link" href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener">SageMaker</a> (AI/ML)</li>
+          <li>Managed Services (<a class="tech-link" href="https://aws.amazon.com/s3" target="_blank" rel="noopener">S3</a>, <a class="tech-link" href="https://aws.amazon.com/sqs" target="_blank" rel="noopener">SQS</a>, <a class="tech-link" href="https://aws.amazon.com/sns" target="_blank" rel="noopener">SNS</a>)</li>
+        </ul>
+      </div>
+
+      <div class="card card-blue">
+        <span class="cloud-logo cloud-azure">Azure</span>
+        <div class="card-title">Microsoft Azure</div>
+        <ul class="card-items">
+          <li><a class="tech-link" href="https://azure.microsoft.com/en-us/products/kubernetes-service" target="_blank" rel="noopener">AKS</a> (Managed Kubernetes)</li>
+          <li><a class="tech-link" href="https://azure.microsoft.com/en-us/products/functions" target="_blank" rel="noopener">Azure Functions</a> (Serverless)</li>
+          <li><a class="tech-link" href="https://azure.microsoft.com/en-us/products/container-apps" target="_blank" rel="noopener">Container Apps</a></li>
+          <li><a class="tech-link" href="https://azure.microsoft.com/en-us/products/azure-sql" target="_blank" rel="noopener">Azure SQL</a> / <a class="tech-link" href="https://azure.microsoft.com/en-us/products/cosmos-db" target="_blank" rel="noopener">Cosmos DB</a></li>
+          <li><a class="tech-link" href="https://azure.microsoft.com/en-us/products/machine-learning" target="_blank" rel="noopener">Azure ML</a> Workspace</li>
+          <li>Managed Services (<a class="tech-link" href="https://azure.microsoft.com/en-us/products/storage/blobs" target="_blank" rel="noopener">Blob</a>, <a class="tech-link" href="https://azure.microsoft.com/en-us/products/service-bus" target="_blank" rel="noopener">SB</a>, <a class="tech-link" href="https://azure.microsoft.com/en-us/products/event-hubs" target="_blank" rel="noopener">EH</a>)</li>
+        </ul>
+      </div>
+
+      <div class="card card-blue">
+        <span class="cloud-logo cloud-gcp">GCP</span>
+        <div class="card-title">Google Cloud Platform</div>
+        <ul class="card-items">
+          <li><a class="tech-link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener">GKE</a> Autopilot</li>
+          <li><a class="tech-link" href="https://cloud.google.com/run" target="_blank" rel="noopener">Cloud Run</a> (Serverless)</li>
+          <li><a class="tech-link" href="https://cloud.google.com/functions" target="_blank" rel="noopener">Cloud Functions</a></li>
+          <li><a class="tech-link" href="https://cloud.google.com/sql" target="_blank" rel="noopener">Cloud SQL</a> / <a class="tech-link" href="https://cloud.google.com/spanner" target="_blank" rel="noopener">Spanner</a></li>
+          <li><a class="tech-link" href="https://cloud.google.com/vertex-ai" target="_blank" rel="noopener">Vertex AI</a> (AI/ML)</li>
+          <li>Managed Services (<a class="tech-link" href="https://cloud.google.com/storage" target="_blank" rel="noopener">GCS</a>, <a class="tech-link" href="https://cloud.google.com/pubsub" target="_blank" rel="noopener">PubSub</a>)</li>
+        </ul>
+      </div>
+
+      <div class="card card-purple">
+        <span class="cloud-logo cloud-types">Workload Types</span>
+        <div class="card-title">Execution Models</div>
+        <ul class="card-items">
+          <li>API Services (REST / gRPC)</li>
+          <li>Web Apps (SPA / SSR)</li>
+          <li>Batch Jobs (Scheduled)</li>
+          <li>AI/ML Models (Endpoints)</li>
+          <li>Data Pipelines (ETL/ELT)</li>
+          <li>Event-Driven (Streaming)</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- META ROW: Design Principles + Business Value + Legend                  -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="meta-row" style="margin-top:6px;">
+
+    <div class="meta-card">
+      <div class="meta-title">
+        <span class="dot" style="background:#10B981;"></span>
+        Design Principles
+      </div>
+      <ul class="meta-list ticks">
+        <li>Cloud-agnostic control plane</li>
+        <li>Cloud-native execution layer</li>
+        <li>Security &amp; compliance by default</li>
+        <li>Self-service with guardrails</li>
+        <li>Opinionated but extensible</li>
+      </ul>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-title">
+        <span class="dot" style="background:#3B82F6;"></span>
+        Business Value
+      </div>
+      <ul class="meta-list bullets" style="color: #60A5FA">
+        <li style="color:var(--muted)">Faster delivery (standardised pipelines)</li>
+        <li style="color:var(--muted)">Built-in security (shift-left controls)</li>
+        <li style="color:var(--muted)">Cloud flexibility (no vendor lock-in)</li>
+        <li style="color:var(--muted)">AI-ready platform (governed workspaces)</li>
+        <li style="color:var(--muted)">Full visibility &amp; cost governance</li>
+      </ul>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-title">
+        <span class="dot" style="background:#EC4899;"></span>
+        Traffic Flow Legend
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <svg width="36" height="2" style="flex-shrink:0">
+            <line x1="0" y1="1" x2="36" y2="1" stroke="#3B82F6" stroke-width="2" stroke-dasharray="5 3"/>
+          </svg>
+          <span>Developer Request</span>
+        </div>
+        <div class="legend-item">
+          <svg width="36" height="2" style="flex-shrink:0">
+            <line x1="0" y1="1" x2="36" y2="1" stroke="#10B981" stroke-width="2" stroke-dasharray="5 3"/>
+          </svg>
+          <span>Factory Processing</span>
+        </div>
+        <div class="legend-item">
+          <svg width="36" height="2" style="flex-shrink:0">
+            <line x1="0" y1="1" x2="36" y2="1" stroke="#F59E0B" stroke-width="2" stroke-dasharray="5 3"/>
+          </svg>
+          <span>Security Validation</span>
+        </div>
+        <div class="legend-item">
+          <svg width="36" height="2" style="flex-shrink:0">
+            <line x1="0" y1="1" x2="36" y2="1" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="5 3"/>
+          </svg>
+          <span>Cloud Deployment</span>
+        </div>
+        <div class="legend-item">
+          <svg width="36" height="2" style="flex-shrink:0">
+            <line x1="0" y1="1" x2="36" y2="1" stroke="#EC4899" stroke-width="2" stroke-dasharray="5 3"/>
+          </svg>
+          <span>Observability Feed</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- COMPLIANCE BADGES ROW                                                  -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="section-compliance" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+    <a class="compliance-badge" href="https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final" target="_blank" rel="noopener"><div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#34D399;">NIST SP 800-53 Rev5</div></a>
+    <a class="compliance-badge" href="https://www.fedramp.gov" target="_blank" rel="noopener"><div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#34D399;">FedRAMP High</div></a>
+    <a class="compliance-badge" href="https://www.hhs.gov/hipaa" target="_blank" rel="noopener"><div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#34D399;">HIPAA</div></a>
+    <a class="compliance-badge" href="https://hitrustalliance.net" target="_blank" rel="noopener"><div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#34D399;">HITRUST</div></a>
+    <a class="compliance-badge" href="https://dodcio.defense.gov/CMMC" target="_blank" rel="noopener"><div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#34D399;">CMMC Level 2</div></a>
+    <a class="compliance-badge" href="https://www.cisecurity.org/cis-benchmarks" target="_blank" rel="noopener"><div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#34D399;">CIS Benchmarks</div></a>
+    <a class="compliance-badge" href="https://www.cncf.io" target="_blank" rel="noopener"><div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#60A5FA;">CNCF Incubated</div></a>
+    <a class="compliance-badge" href="https://slsa.dev" target="_blank" rel="noopener"><div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#60A5FA;">SLSA Level 3</div></a>
+    <a class="compliance-badge" href="https://csrc.nist.gov/publications/detail/sp/800-207/final" target="_blank" rel="noopener"><div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:6px; padding:6px 14px; font-size:10.5px; font-weight:600; letter-spacing:0.08em; color:#60A5FA;">Zero Trust Architecture</div></a>
+  </div>
+
+</div>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────────── -->
+<footer class="page-footer">
+  <p>Software Factory Architecture — Enterprise Multi-Cloud DevSecOps Platform · v3.0 · 2026</p>
+  <p style="margin-top:4px; font-size:10px; opacity:0.6;">Hover cards for tooltips · Animated flow lines indicate real-time data flows · Click any technology name for official docs</p>
+</footer>
+
+<!-- ── JavaScript ─────────────────────────────────────────────────────────── -->
+<script>
+  // Navigation sidebar
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navSidebar = document.getElementById('navSidebar');
+  const navOverlay = document.getElementById('navOverlay');
+
+  function openSidebar() {
+    navSidebar.classList.add('open');
+    navOverlay.classList.add('open');
+    hamburgerBtn.classList.add('active');
+  }
+  function closeSidebar() {
+    navSidebar.classList.remove('open');
+    navOverlay.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+  }
+  hamburgerBtn.addEventListener('click', function() {
+    if (navSidebar.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+  navOverlay.addEventListener('click', closeSidebar);
+
+  // Resources drawer
+  const resDrawer = document.getElementById('resDrawer');
+  const resOverlay = document.getElementById('resOverlay');
+  const resCloseBtn = document.getElementById('resCloseBtn');
+
+  function openResources() {
+    resDrawer.classList.add('open');
+    resOverlay.classList.add('open');
+  }
+  function closeResources() {
+    resDrawer.classList.remove('open');
+    resOverlay.classList.remove('open');
+  }
+  resCloseBtn.addEventListener('click', closeResources);
+  resOverlay.addEventListener('click', closeResources);
+
+  // Close drawers on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeSidebar();
+      closeResources();
+    }
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
