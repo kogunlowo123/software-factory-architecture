@@ -59,16 +59,38 @@
 
   /* ── Tech links styling ── */
   a.tech-link {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    transition: text-decoration-color 0.2s;
+    color: #93C5FD;
     text-decoration: underline;
-    text-decoration-color: transparent;
+    text-decoration-color: rgba(147,197,253,0.4);
     text-underline-offset: 2px;
+    cursor: pointer;
+    transition: color 0.2s, text-decoration-color 0.2s;
+    font-weight: 600;
   }
   a.tech-link:hover {
-    text-decoration-color: currentColor;
+    color: #BFDBFE;
+    text-decoration-color: #BFDBFE;
+  }
+  .card-teal a.tech-link  { color: #6EE7B7; text-decoration-color: rgba(110,231,183,0.4); }
+  .card-teal a.tech-link:hover  { color: #A7F3D0; text-decoration-color: #A7F3D0; }
+  .card-amber a.tech-link { color: #FCD34D; text-decoration-color: rgba(252,211,77,0.4); }
+  .card-amber a.tech-link:hover { color: #FDE68A; text-decoration-color: #FDE68A; }
+  .card-pink a.tech-link  { color: #F9A8D4; text-decoration-color: rgba(249,168,212,0.4); }
+  .card-pink a.tech-link:hover  { color: #FBCFE8; text-decoration-color: #FBCFE8; }
+  .card-purple a.tech-link { color: #C4B5FD; text-decoration-color: rgba(196,181,253,0.4); }
+  .card-purple a.tech-link:hover { color: #DDD6FE; text-decoration-color: #DDD6FE; }
+  .card-red a.tech-link   { color: #FCA5A5; text-decoration-color: rgba(252,165,165,0.4); }
+  .card-red a.tech-link:hover   { color: #FECACA; text-decoration-color: #FECACA; }
+  .card-blue a.tech-link  { color: #93C5FD; text-decoration-color: rgba(147,197,253,0.4); }
+  .card-blue a.tech-link:hover  { color: #BFDBFE; text-decoration-color: #BFDBFE; }
+  a.tech-link::after {
+    content: ' ↗';
+    font-size: 9px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  a.tech-link:hover::after {
+    opacity: 0.7;
   }
 
   /* ── Header ── */
